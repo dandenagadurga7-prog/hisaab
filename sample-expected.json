@@ -1,0 +1,15 @@
+{
+  "shop": "Sri Lakshmi Kirana Store",
+  "customers": 5,
+  "entries": 8,
+  "totalOutstanding": 11820,
+  "balances": {
+    "9876543210": 3000,
+    "9123456780": 3000,
+    "9000012345": 2500,
+    "9988776655": 1200,
+    "9012345678": 2120
+  },
+  "overdueFirst": "Anil Reddy",
+  "note": "Check these after loading sample-data.json through the import box. today=2026-11-15."
+}

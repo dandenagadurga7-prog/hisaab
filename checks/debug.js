@@ -1,0 +1,18 @@
+﻿var http=require("http"),fs=require("fs"),path=require("path"),puppeteer=require("puppeteer-core");
+var ROOT=path.join(__dirname,".."),PORT=4181;
+var T={".html":"text/html; charset=utf-8",".css":"text/css",".js":"text/javascript",".json":"application/json",".png":"image/png"};
+var s=http.createServer(function(req,res){var u=decodeURIComponent(String(req.url||"/").split("?")[0]);if(u==="/")u="/index.html";var f=path.join(ROOT,u);if(!fs.existsSync(f)){res.statusCode=404;res.end("nf");return;}res.setHeader("Content-Type",T[path.extname(f)]||"text/plain");res.end(fs.readFileSync(f));});
+(async function(){await new Promise(r=>s.listen(PORT,"127.0.0.1",r));var b=await puppeteer.launch({executablePath:"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",headless:true,args:["--no-sandbox"]});var p=await b.newPage();
+p.on("console",m=>console.log("CONSOLE",m.type(),m.text()));p.on("pageerror",e=>console.log("PAGEERROR",e.message));
+await p.goto("http://127.0.0.1:"+PORT+"/?today=2026-11-15",{waitUntil:"networkidle0"});
+console.log("HisaabLogic?", await p.evaluate(()=>typeof window.HisaabLogic));
+console.log("before import msg:", await p.$eval("#import-msg",e=>e.textContent));
+var sample=fs.readFileSync(path.join(ROOT,"sample-data.json"),"utf8");
+await p.$eval("#import-box",(el,v)=>{el.value=v;},sample);
+console.log("textarea len", await p.$eval("#import-box",e=>e.value.length));
+await p.click("#import-go");
+await new Promise(r=>setTimeout(r,500));
+console.log("after import msg:", await p.$eval("#import-msg",e=>e.textContent));
+console.log("rows", await p.$$eval("[data-customer]",els=>els.length));
+console.log("total", await p.$eval("#total-outstanding",e=>e.textContent));
+await b.close();s.close();})().catch(e=>{console.error(e);process.exit(1);});

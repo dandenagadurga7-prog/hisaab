@@ -1,0 +1,180 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1f6f4a" />
+  <title>Hisaab — simple shop ledger</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f6f4a'/%3E%3Ctext x='32' y='45' font-size='36' text-anchor='middle' fill='white' font-family='Georgia'%3E%E2%82%B9%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">₹</div>
+        <div>
+          <h1>Hisaab</h1>
+          <div class="muted" id="shop-name">Your shop</div>
+        </div>
+      </div>
+      <div class="total-card">
+        <div class="muted" data-i18n="total">Total outstanding</div>
+        <strong id="total-outstanding">Rs 0</strong>
+      </div>
+    </header>
+
+    <div class="toolbar" role="toolbar">
+      <input id="search" class="input" type="search" placeholder="Search name or phone" data-i18n-ph="search" autocomplete="off" />
+      <button id="btn-add-customer" class="btn primary" data-i18n="addCustomer">+ Customer</button>
+      <button id="btn-add-entry" class="btn" data-i18n="addEntry">+ Entry</button>
+      <button id="btn-import" class="btn" data-i18n="import">Import</button>
+      <button id="btn-export" class="btn" data-i18n="export">CSV</button>
+      <button id="btn-settings" class="btn ghost" data-i18n="settings">Settings</button>
+      <select id="lang" class="select" title="Language">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+        <option value="te">తెలుగు</option>
+      </select>
+    </div>
+
+    <main class="content">
+      <section id="overdue-card" class="card overdue" hidden>
+        <div class="card-head">
+          <h2 data-i18n="overdue">Overdue</h2>
+          <span class="hint" data-i18n="overdueHint">Longest since last payment first</span>
+        </div>
+        <div id="overdue-list" class="overdue-list"></div>
+      </section>
+
+      <section id="list-view">
+        <div class="list-head">
+          <h2 data-i18n="customers">Customers</h2>
+          <span class="count" id="customer-count"></span>
+        </div>
+        <div id="customer-list" class="customer-list"></div>
+        <div id="empty-state" class="empty" hidden>
+          <p><strong data-i18n="emptyTitle">No customers yet.</strong></p>
+          <p class="muted" data-i18n="emptyBody">Add a customer, or load the sample shop through Import.</p>
+        </div>
+      </section>
+
+      <section id="detail-view" hidden>
+        <a href="#/" class="back" data-i18n="back">← All customers</a>
+        <div class="detail-card">
+          <div class="detail-top">
+            <div>
+              <h2 id="detail-name">Customer</h2>
+              <div class="muted" id="detail-phone"></div>
+            </div>
+            <div class="detail-balance">
+              <div class="muted" data-i18n="balance">Balance</div>
+              <strong id="detail-balance">Rs 0</strong>
+            </div>
+          </div>
+          <div class="detail-actions">
+            <a id="detail-remind" class="btn whatsapp" href="#" target="_blank" rel="noopener" data-i18n="remind">WhatsApp reminder</a>
+            <a id="detail-upi" class="btn" href="#" hidden data-i18n="payUpi">Pay by UPI</a>
+            <button id="detail-add-entry" class="btn primary" data-i18n="addEntryFor">+ Entry for this customer</button>
+          </div>
+        </div>
+        <h3 class="section-title" data-i18n="entries">Entries</h3>
+        <div id="detail-entries" class="entries"></div>
+      </section>
+
+      <section id="import-view" class="card">
+        <div class="card-head">
+          <h2 data-i18n="importTitle">Import a shop</h2>
+          <span class="hint" data-i18n="importHint">Paste the JSON, then press Load JSON</span>
+        </div>
+        <textarea id="import-box" class="input textarea" rows="8" spellcheck="false" placeholder="Paste the shop JSON here"></textarea>
+        <div class="row">
+          <button id="import-go" class="btn primary" data-i18n="importGo">Load JSON</button>
+        </div>
+        <p id="import-msg" class="muted"></p>
+        <details class="format">
+          <summary data-i18n="format">Accepted format</summary>
+          <pre>{
+  "shop": "Shop name",
+  "upi": "shop@upi",
+  "customers": [{ "name": "Ravi", "phone": "9876543210" }],
+  "entries": [
+    { "phone": "9876543210", "type": "credit", "amount": 500, "date": "2026-11-01", "note": "Rice" }
+  ]
+}</pre>
+        </details>
+      </section>
+
+      <section id="settings-view" class="card" hidden>
+        <div class="card-head">
+          <h2 data-i18n="settingsTitle">Shop settings</h2>
+        </div>
+        <label class="fld" data-i18n="shopName">Shop name</label>
+        <input id="set-shop" class="input" />
+        <label class="fld" data-i18n="upiId">UPI ID (for the pay link)</label>
+        <input id="set-upi" class="input" placeholder="shop@upi" />
+        <div class="row">
+          <button id="settings-save" class="btn primary" data-i18n="save">Save</button>
+          <button id="settings-close" class="btn ghost" data-i18n="close">Close</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span data-i18n="foot">Saved on this phone. No account needed.</span>
+    </footer>
+  </div>
+
+  <!-- Customer form -->
+  <div id="customer-overlay" class="overlay" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="cust-title">
+      <div class="sheet-head">
+        <h2 id="cust-title" data-i18n="addCustomerTitle">Add customer</h2>
+        <button class="x" id="cust-cancel" aria-label="Close">×</button>
+      </div>
+      <label class="fld" data-i18n="name">Name</label>
+      <input id="cust-name" class="input" autocomplete="name" />
+      <label class="fld" data-i18n="phone">Phone (10 digits)</label>
+      <input id="cust-phone" class="input" inputmode="numeric" maxlength="10" autocomplete="tel" />
+      <p id="cust-msg" class="error"></p>
+      <div class="row">
+        <button id="cust-save" class="btn primary" data-i18n="save">Save</button>
+        <button id="cust-close" class="btn ghost" data-i18n="cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entry form -->
+  <div id="entry-overlay" class="overlay" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="entry-title">
+      <div class="sheet-head">
+        <h2 id="entry-title" data-i18n="addEntryTitle">Add entry</h2>
+        <button class="x" id="entry-cancel" aria-label="Close">×</button>
+      </div>
+      <label class="fld" data-i18n="customer">Customer</label>
+      <select id="entry-customer" class="select"></select>
+      <div class="seg" role="group" aria-label="Entry type">
+        <label><input type="radio" name="entry-type" value="credit" checked /> <span data-i18n="credit">Credit (goods given)</span></label>
+        <label><input type="radio" name="entry-type" value="payment" /> <span data-i18n="payment">Payment (money received)</span></label>
+      </div>
+      <label class="fld" data-i18n="amount">Amount (Rs)</label>
+      <input id="entry-amount" class="input" inputmode="decimal" placeholder="0" />
+      <label class="fld" data-i18n="date">Date</label>
+      <input id="entry-date" class="input" type="date" />
+      <label class="fld" data-i18n="note">Note (short)</label>
+      <input id="entry-note" class="input" placeholder="Rice, oil, cash…" />
+      <label class="fld" data-i18n="shot">Payment screenshot (optional)</label>
+      <input id="shot-input" class="input" type="file" accept="image/*" />
+      <div id="shot-preview" class="shot-preview"></div>
+      <p id="entry-msg" class="error"></p>
+      <div class="row">
+        <button id="entry-save" class="btn primary" data-i18n="save">Save</button>
+        <button id="entry-close" class="btn ghost" data-i18n="cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="logic.js?v=1"></script>
+  <script src="app.js?v=1"></script>
+</body>
+</html>

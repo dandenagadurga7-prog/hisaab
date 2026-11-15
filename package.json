@@ -1,0 +1,15 @@
+{
+  "name": "hisaab",
+  "version": "1.0.0",
+  "description": "Hisaab — a simple digital ledger for a local shop (browser storage, no database).",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "check:logic": "node checks/logic-check.js",
+    "check:ui": "node checks/ui-check.js",
+    "check": "node checks/logic-check.js && node checks/ui-check.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  }
+}
