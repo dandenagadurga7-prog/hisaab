@@ -2,6 +2,10 @@
 
 A notebook for a local shop: who owes what, a WhatsApp reminder in one tap. Plain HTML, CSS and JavaScript. No build step, no database, no AI. Data lives in the browser (`localStorage`).
 
+## Live
+
+https://dandenagadurga7-prog.github.io/hisaab/
+
 ## Run
 
 Open `index.html` in a browser, or serve the folder:
