@@ -9,7 +9,7 @@
  *
  * The cache name is versioned; old caches are dropped on activate.
  */
-const CACHE = 'hisaab-shell-v1';
+const CACHE = 'hisaab-shell-v2';
 const SHELL = [
   './',
   './index.html',
