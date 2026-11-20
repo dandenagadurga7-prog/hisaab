@@ -4,8 +4,10 @@
 |---|---|
 | Version | 1.0 |
 | Target | Vercel or Netlify (static SPA) |
-| Status | **Build verified and deployment-ready. Not published — no authorized account session was available in this environment.** |
+| Status | **Live** — deployed to GitHub Pages |
 | Artifact | `dist/` from `npm run build` (app + manifest + service worker + icons) |
+| Live URL | https://dandenagadurga7-prog.github.io/hisaab/ |
+| Demo URL | https://dandenagadurga7-prog.github.io/hisaab/?today=2026-11-15 |
 
 Hisaab is a static single-page application. There is no server, no database, no environment variable and no secret. Deployment is copying `dist/` to a static host.
 
@@ -40,9 +42,33 @@ npm run preview   # http://localhost:4173
 
 ## 2. Current deployment status
 
-`vercel whoami` reports **"Logged out"**, there is no `.vercel` project link and no `VERCEL_TOKEN` / `NETLIFY_AUTH_TOKEN` in the environment. Per the delivery rules, the app is **not deployed** and no URL is claimed.
+**Live at https://dandenagadurga7-prog.github.io/hisaab/** on GitHub Pages, verified end to end on 2026-11-20.
 
-The repository is one authenticated command away from production. Run either path below from the project root.
+| Item | Value |
+|---|---|
+| Repository | https://github.com/dandenagadurga7-prog/hisaab |
+| Source branch | `v1.1` (the older app remains untouched on `main`) |
+| Published branch | `gh-pages` (the built `dist/` output) |
+| Pages source | `gh-pages` / root, HTTPS enforced |
+| Build | 200 OK, new asset served, manifest + service worker active with scope `/hisaab/` |
+| Live checks | ₹11,820 sample total, ₹670 Ravi, WhatsApp link, scanner read ₹700 in 2.4 s, success screen, offline reload, **0 console errors** |
+
+Redeploy after a change:
+
+```bash
+npm run build            # Vite clears dist/, including any previous git metadata
+cd dist
+git init -b gh-pages
+git add -A
+git commit -m "Deploy Hisaab"
+git remote add origin https://github.com/dandenagadurga7-prog/hisaab.git
+git push -f origin gh-pages
+gh api -X POST repos/dandenagadurga7-prog/hisaab/pages/builds
+```
+
+The service worker also needs a cache-name bump in `public/sw.js` only when the shell strategy itself changes; asset names are content-hashed.
+
+Vercel and Netlify remain fully supported (the build is host-agnostic with a relative base); those paths are documented below for a future custom domain.
 
 ---
 
@@ -75,7 +101,7 @@ The CLI prompts for scope and project name on the first run; accept the detected
 VERCEL_TOKEN=… VERCEL_ORG_ID=… VERCEL_PROJECT_ID=… vercel deploy --prod --token "$VERCEL_TOKEN"
 ```
 
-No application environment variables are required.
+No application environment variables are required. Note: `vercel whoami` is currently logged out on this machine, and `vercel deploy --temporary` is no longer available without a session.
 
 ---
 

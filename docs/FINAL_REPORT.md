@@ -9,7 +9,7 @@
 | Source | 49 files · ~7,950 lines of application code |
 | Tests | 6 files · 1,530 lines · **98 / 98 passing** |
 | Build | `dist/` — 106 kB gzipped JS (incl. lazy OCR), 8 kB gzipped CSS |
-| Deployment | Verified build, **not published** (no authorized hosting session) |
+| Deployment | **Live:** https://dandenagadurga7-prog.github.io/hisaab/ |
 
 ---
 
@@ -190,18 +190,22 @@ The review and backlog are in `docs/IMPROVEMENTS.md`. **No open P0 or P1 issues.
 
 ## 8. Deployment status
 
-**Not deployed.** The build is deployment-ready and documented, but this environment has no authorized hosting session: `vercel whoami` returns "Logged out", there is no linked `.vercel` project, and no `VERCEL_TOKEN` or `NETLIFY_AUTH_TOKEN` is present. Per the brief, no URL is claimed without a successful deployment.
+**Live at https://dandenagadurga7-prog.github.io/hisaab/** (GitHub Pages), verified on 2026-11-20.
 
-To publish (from the project root, with account access):
+| Check | Live result |
+|---|---|
+| HTTP | 200, correct title, CSS applied |
+| Sample data | ₹11,820 total, 8 customers, Ravi ₹670 |
+| WhatsApp link | `https://wa.me/919000000101?text=…` |
+| Scanner (real OCR) | ₹700 detected in 2.4 s on the deployed site |
+| Success screen | "Payment recorded", new balance −₹30, screenshot stored |
+| PWA | Manifest 200, 3 icons, standalone, SW scope `/hisaab/` |
+| Offline reload | App renders |
+| Console / failed requests | 0 / 0 |
 
-```bash
-npm ci && npm run build
-vercel login
-vercel --prod
-# or: netlify deploy --prod --dir=dist
-```
+Demo link: [https://dandenagadurga7-prog.github.io/hisaab/?today=2026-11-15](https://dandenagadurga7-prog.github.io/hisaab/?today=2026-11-15)
 
-`vercel.json` and `netlify.toml` are included with the SPA rewrite, immutable asset caching and security headers. Full guide and post-deploy checklist: `docs/DEPLOYMENT.md`.
+**Repository layout:** source on `v1.1`, published build on `gh-pages`, the older app untouched on `main`. Pages serves `gh-pages` with HTTPS enforced. `vercel.json` and `netlify.toml` remain for a future move to a custom domain. Full guide: `docs/DEPLOYMENT.md`.
 
 ---
 

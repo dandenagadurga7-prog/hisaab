@@ -1,5 +1,9 @@
 # Hisaab — Digital Khata
 
+**Live app:** [https://dandenagadurga7-prog.github.io/hisaab/](https://dandenagadurga7-prog.github.io/hisaab/) · **Demo date:** [https://dandenagadurga7-prog.github.io/hisaab/?today=2026-11-15](https://dandenagadurga7-prog.github.io/hisaab/?today=2026-11-15)
+
+Source: [github.com/dandenagadurga7-prog/hisaab](https://github.com/dandenagadurga7-prog/hisaab) (branch `v1.1`; the published build lives on `gh-pages`).
+
 A premium, offline-first credit ledger (khata) for Indian kirana shops, provision stores and local merchants. Built with React, Vite, TypeScript and Tailwind CSS. No backend, no account, no API keys — every byte stays in the owner's browser.
 
 ![status](https://img.shields.io/badge/tests-98%20passing-brightgreen) ![bundle](https://img.shields.io/badge/gzip-106%20kB-blue) ![pwa](https://img.shields.io/badge/PWA-installable-0E7C5A) ![storage](https://img.shields.io/badge/storage-local--only-orange)

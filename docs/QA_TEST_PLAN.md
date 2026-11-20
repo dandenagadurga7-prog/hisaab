@@ -5,6 +5,7 @@
 | Version | 1.0 |
 | Status | **Executed — 98/98 automated tests passing, desktop + mobile browser smoke passed** |
 | Last run | 2026-11-20 (v1.1 — scanner, success screens, PWA) |
+| Live deployment | https://dandenagadurga7-prog.github.io/hisaab/ — verified 2026-11-20 |
 | Related | `PRD.md` §9–§10, `IMPLEMENTATION_PLAN.md` Phase 11 |
 
 ---
